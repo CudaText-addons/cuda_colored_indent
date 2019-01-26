@@ -1,0 +1,11 @@
+[info]
+title=Colored Indent
+desc=Some description
+type=cudatext-plugin
+subdir=cuda_colored_indent
+homepage=
+
+[item1]
+section=events
+events=on_open,on_change_slow
+
