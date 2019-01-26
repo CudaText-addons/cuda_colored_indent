@@ -53,16 +53,16 @@ class Command:
     
         lines = ed.get_text_all().splitlines()
         for (index, s) in enumerate(lines):
-            indent_str = get_indent(s)
-            if not indent_str:
+            indent = get_indent(s)
+            if not indent:
                 continue
             
             level = -1
             x = 0
             
-            while indent_str:
+            while indent:
                 level += 1
-                if indent_str[0]=='\t':
+                if indent[0]=='\t':
                     ed.attr(MARKERS_ADD, 
                         x=x, 
                         y=index, 
@@ -71,9 +71,9 @@ class Command:
                         color_font=0,
                         color_bg=get_color(level),
                         )
-                    indent_str = indent_str[1:]
+                    indent = indent[1:]
                     x += 1
-                elif indent_str[:tab_size]==' '*tab_size:
+                elif indent[:tab_size]==' '*tab_size:
                     ed.attr(MARKERS_ADD, 
                         x=x, 
                         y=index, 
@@ -82,13 +82,13 @@ class Command:
                         color_font=0,
                         color_bg=get_color(level),
                         )
-                    indent_str = indent_str[tab_size:]
+                    indent = indent[tab_size:]
                     x += tab_size
                 else:
                     ed.attr(MARKERS_ADD, 
                         x=x, 
                         y=index, 
-                        len=len(indent_str), 
+                        len=len(indent), 
                         tag=MARKTAG, 
                         color_font=0,
                         color_bg=option_color_error,
