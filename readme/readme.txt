@@ -7,9 +7,10 @@ if some indentation is incorrect (e.g. 5-7 chars with "tab_size":4), then
 it's highlighted in special color.
 
 plugin has config file, to open it: "Options / Settings-plugins / Colored Indent / Config".
-- option "lexers": ","-separated lexers, for which plugin is active.
-- option "color_set": ","-separated list of syntax-theme elements, from which background colors are taken.
-- option "color_error": syntax-theme element, from which error color is taken.
+- "lexers": ","-separated lexers, for which plugin is active.
+- "color_set": ","-separated list of syntax-theme elements, from which background colors are taken.
+- "color_error": syntax-theme element, from which error color is taken.
+- "max_lines": maximal count of lines in document, when plugin is active
 
 author: Alexey (CudaText)
 license: MIT

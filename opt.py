@@ -5,3 +5,4 @@ DEF_LEXERS = 'Python'
 color_error = 0xff
 color_set = (0xff00, 0xffff)
 lexers = ''
+max_lines = 2000

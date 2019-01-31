@@ -33,6 +33,7 @@ class Command:
         self.color_set = [_theme_item(i) for i in opt.color_set.split(',')]
         
         opt.lexers = ini_read(fn_config, 'op', 'lexers', opt.DEF_LEXERS)
+        opt.max_lines = int(ini_read(fn_config, 'op', 'max_lines', '2000'))
 
     def get_color(self, n):
     
@@ -43,6 +44,7 @@ class Command:
         ini_write(fn_config, 'op', 'lexers', opt.lexers)
         ini_write(fn_config, 'op', 'color_error', opt.color_error)
         ini_write(fn_config, 'op', 'color_set', opt.color_set)
+        ini_write(fn_config, 'op', 'max_lines', str(opt.max_lines))
         file_open(fn_config)
         
     def on_change_slow(self, ed_self):
@@ -59,6 +61,9 @@ class Command:
         if not lex:
             return
         if not ','+lex+',' in ','+opt.lexers+',':
+            return
+            
+        if ed.get_line_count()>opt.max_lines:
             return
    
         tab_size = ed.get_prop(PROP_TAB_SIZE)
