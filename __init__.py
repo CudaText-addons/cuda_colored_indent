@@ -26,16 +26,23 @@ class Command:
     
     def __init__(self):
 
-        opt.color_error = _theme_item(opt.DEF_ERROR)            
-        opt.color_set = [_theme_item(s) for s in opt.DEF_SET.split(',')]
+        opt.color_error = ini_read(fn_config, 'op', 'color_error', opt.DEF_ERROR)
+        self.color_error = _theme_item(opt.color_error)
+        
+        opt.color_set = ini_read(fn_config, 'op', 'color_set', opt.DEF_SET)
+        self.color_set = [_theme_item(i) for i in opt.color_set.split(',')]
+        
         opt.lexers = ini_read(fn_config, 'op', 'lexers', opt.DEF_LEXERS)
 
     def get_color(self, n):
-        return opt.color_set[n%len(opt.color_set)]
+    
+        return self.color_set[n%len(self.color_set)]
 
     def config(self):
 
         ini_write(fn_config, 'op', 'lexers', opt.lexers)
+        ini_write(fn_config, 'op', 'color_error', opt.color_error)
+        ini_write(fn_config, 'op', 'color_set', opt.color_set)
         file_open(fn_config)
         
     def on_change_slow(self, ed_self):
@@ -97,6 +104,6 @@ class Command:
                         len=len(indent), 
                         tag=MARKTAG, 
                         color_font=0,
-                        color_bg=opt.color_error,
+                        color_bg=self.color_error,
                         )
                     break
