@@ -10,7 +10,9 @@ plugin has config file, to open it: "Options / Settings-plugins / Colored Indent
 - "lexers": ","-separated lexers, for which plugin is active.
 - "color_set": ","-separated list of syntax-theme elements, from which background colors are taken.
 - "color_error": syntax-theme element, from which error color is taken.
-- "max_lines": maximal count of lines in document, when plugin is active
+- "max_lines": maximal count of lines in document, when plugin is active.
+
+plugin works on events: after file opened; after text is changed and short pause is passed.
 
 author: Alexey (CudaText)
 license: MIT
