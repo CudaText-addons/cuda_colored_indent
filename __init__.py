@@ -56,6 +56,8 @@ class Command:
     def work(self, ed):
     
         lex = ed.get_prop(PROP_LEXER_FILE)
+        if not lex:
+            return
         if not ','+lex+',' in ','+opt.lexers+',':
             return
    
