@@ -26,15 +26,17 @@ class Command:
     
     def __init__(self):
 
-        opt.color_error = _theme_item(opt.COLOR_ERROR)            
-        opt.color_set = [_theme_item(s) for s in opt.COLOR_SET.split(',')]
+        opt.color_error = _theme_item(opt.DEF_ERROR)            
+        opt.color_set = [_theme_item(s) for s in opt.DEF_SET.split(',')]
+        opt.lexers = ini_read(fn_config, 'op', 'lexers', opt.DEF_LEXERS)
 
     def get_color(self, n):
         return opt.color_set[n%len(opt.color_set)]
 
     def config(self):
 
-        pass
+        ini_write(fn_config, 'op', 'lexers', opt.lexers)
+        file_open(fn_config)
         
     def on_change_slow(self, ed_self):
         
@@ -45,6 +47,10 @@ class Command:
         self.work(ed_self)
         
     def work(self, ed):
+    
+        lex = ed.get_prop(PROP_LEXER_FILE)
+        if not ','+lex+',' in ','+opt.lexers+',':
+            return
    
         tab_size = ed.get_prop(PROP_TAB_SIZE)
         tab_spaces = ed.get_prop(PROP_TAB_SPACES)

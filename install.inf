@@ -8,3 +8,9 @@ homepage=https://github.com/CudaText-addons/cuda_colored_indent
 [item1]
 section=events
 events=on_open,on_change_slow
+
+[item2]
+section=commands
+caption=Colored Indent\Config
+method=config
+menu=o
