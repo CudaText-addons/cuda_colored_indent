@@ -4,37 +4,39 @@ from cudatext import *
 fn_config = os.path.join(app_path(APP_DIR_SETTINGS), 'cuda_colored_indent.ini')
 MARKTAG = 103 #uniq value for all ed.attr() plugins
 
-option_colors = (0xa000, 0xa0a0, 0xa04000, 0xa000a0)
-option_color_error = 0xa0a0ff
-
 def bool_to_str(v): return '1' if v else '0'
 def str_to_bool(s): return s=='1'
 
+_theme = app_proc(PROC_THEME_SYNTAX_DATA_GET, '')
+
+def _theme_item(name):
+    for i in _theme:
+        if i['name']==name:
+            return i['color_back']
+    return 0x808080
+
+COLOR_SET = 'SectionBG1,SectionBG2,SectionBG3,SectionBG4'
+COLOR_ERROR = 'IncludeBG1'
+            
 def get_indent(s):
     for i in range(len(s)):
         if s[i] not in (' ', '\t'):
             return s[:i]
     return ''
             
-def get_color(n):
-    return option_colors[n%len(option_colors)]
-
 class Command:
     
     def __init__(self):
 
-        pass
-        #global option_int
-        #global option_bool
-        #option_int = int(ini_read(fn_config, 'op', 'option_int', str(option_int)))
-        #option_bool = str_to_bool(ini_read(fn_config, 'op', 'option_bool', bool_to_str(option_bool)))
+        self.color_error = _theme_item(COLOR_ERROR)            
+        self.color_set = [_theme_item(s) for s in COLOR_SET.split(',')]
+
+    def get_color(self, n):
+        return self.color_set[n%len(self.color_set)]
 
     def config(self):
 
         pass
-        #ini_write(fn_config, 'op', 'option_int', str(option_int))
-        #ini_write(fn_config, 'op', 'option_bool', bool_to_str(option_bool))
-        #file_open(fn_config)
         
     def on_change_slow(self, ed_self):
         
@@ -69,7 +71,7 @@ class Command:
                         len=1, 
                         tag=MARKTAG, 
                         color_font=0,
-                        color_bg=get_color(level),
+                        color_bg=self.get_color(level),
                         )
                     indent = indent[1:]
                     x += 1
@@ -80,7 +82,7 @@ class Command:
                         len=tab_size, 
                         tag=MARKTAG, 
                         color_font=0,
-                        color_bg=get_color(level),
+                        color_bg=self.get_color(level),
                         )
                     indent = indent[tab_size:]
                     x += tab_size
@@ -91,6 +93,6 @@ class Command:
                         len=len(indent), 
                         tag=MARKTAG, 
                         color_font=0,
-                        color_bg=option_color_error,
+                        color_bg=self.color_error,
                         )
                     break
