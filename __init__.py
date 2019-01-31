@@ -34,6 +34,16 @@ class Command:
 
         opt.lexers = ini_read(fn_config, 'op', 'lexers', opt.DEF_LEXERS)
         opt.max_lines = int(ini_read(fn_config, 'op', 'max_lines', '2000'))
+        
+        app_proc(PROC_SET_EVENTS, ';'.join([
+            'cuda_colored_indent',
+            'on_open,on_change_slow',
+            opt.lexers
+            ]))
+        
+    def on_start(self, ed_self):
+        
+        pass
 
     def get_color(self, n):
 
@@ -57,11 +67,13 @@ class Command:
 
     def work(self, ed):
 
+        '''
         lex = ed.get_prop(PROP_LEXER_FILE)
         if not lex:
             return
         if not ','+lex+',' in ','+opt.lexers+',':
             return
+        '''
 
         if ed.get_line_count()>opt.max_lines:
             return
