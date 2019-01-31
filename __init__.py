@@ -1,5 +1,6 @@
 import os
 from cudatext import *
+from . import opt
 
 fn_config = os.path.join(app_path(APP_DIR_SETTINGS), 'cuda_colored_indent.ini')
 MARKTAG = 103 #uniq value for all ed.attr() plugins
@@ -15,9 +16,6 @@ def _theme_item(name):
             return i['color_back']
     return 0x808080
 
-COLOR_SET = 'SectionBG1,SectionBG2,SectionBG3,SectionBG4'
-COLOR_ERROR = 'IncludeBG1'
-            
 def get_indent(s):
     for i in range(len(s)):
         if s[i] not in (' ', '\t'):
@@ -28,11 +26,11 @@ class Command:
     
     def __init__(self):
 
-        self.color_error = _theme_item(COLOR_ERROR)            
-        self.color_set = [_theme_item(s) for s in COLOR_SET.split(',')]
+        opt.color_error = _theme_item(opt.COLOR_ERROR)            
+        opt.color_set = [_theme_item(s) for s in opt.COLOR_SET.split(',')]
 
     def get_color(self, n):
-        return self.color_set[n%len(self.color_set)]
+        return opt.color_set[n%len(opt.color_set)]
 
     def config(self):
 
@@ -93,6 +91,6 @@ class Command:
                         len=len(indent), 
                         tag=MARKTAG, 
                         color_font=0,
-                        color_bg=self.color_error,
+                        color_bg=opt.color_error,
                         )
                     break
