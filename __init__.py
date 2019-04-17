@@ -46,8 +46,11 @@ class Command:
 
         self.active = not self.active
         if self.active:
-            self.work(ed)
-            msg_status('Colored Indent: on')
+            if self.lexer_ok(ed):
+                self.work(ed)
+                msg_status('Colored Indent: on')
+            else:
+                msg_status('Colored Indent: on (not for current file)')
         else:
             ed.attr(MARKERS_DELETE_BY_TAG, tag=MARKTAG)
             msg_status('Colored Indent: off')
@@ -76,16 +79,12 @@ class Command:
 
         self.work(ed_self)
 
-    def work(self, ed):
+    def lexer_ok(self, ed):
 
-        '''
         lex = ed.get_prop(PROP_LEXER_FILE)
-        if not lex:
-            return
-        if not ','+lex+',' in ','+opt.lexers+',':
-            return
-        '''
+        return lex and (','+lex+',' in ','+opt.lexers+',')
 
+    def work(self, ed):
         if not self.active:
             return
 
