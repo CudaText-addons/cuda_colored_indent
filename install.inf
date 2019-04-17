@@ -11,6 +11,11 @@ events=on_start
 
 [item2]
 section=commands
+caption=Colored Indent\Toggle active
+method=toggle
+
+[item10]
+section=commands
 caption=Colored Indent\Config
 method=config
 menu=o

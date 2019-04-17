@@ -23,6 +23,7 @@ def get_indent(s):
     return ''
 
 class Command:
+    active = True
 
     def __init__(self):
 
@@ -34,15 +35,25 @@ class Command:
 
         opt.lexers = ini_read(fn_config, 'op', 'lexers', opt.DEF_LEXERS)
         opt.max_lines = int(ini_read(fn_config, 'op', 'max_lines', '2000'))
-        
+
         app_proc(PROC_SET_EVENTS, ';'.join([
             'cuda_colored_indent',
             'on_open,on_change_slow',
             opt.lexers
             ]))
-        
+
+    def toggle(self):
+
+        self.active = not self.active
+        if self.active:
+            self.work(ed)
+            msg_status('Colored Indent: on')
+        else:
+            ed.attr(MARKERS_DELETE_BY_TAG, tag=MARKTAG)
+            msg_status('Colored Indent: off')
+
     def on_start(self, ed_self):
-        
+
         pass
 
     def get_color(self, n):
@@ -74,6 +85,9 @@ class Command:
         if not ','+lex+',' in ','+opt.lexers+',':
             return
         '''
+
+        if not self.active:
+            return
 
         if ed.get_line_count()>opt.max_lines:
             return
