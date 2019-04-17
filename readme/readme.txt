@@ -14,5 +14,5 @@ plugin has config file, to open it: "Options / Settings-plugins / Colored Indent
 
 plugin works on events: after file opened; after text is changed and short pause is passed.
 
-author: Alexey (CudaText)
+author: Alexey Torgashin (CudaText)
 license: MIT
