@@ -1,4 +1,7 @@
 
+2019.04.25
++ add: command "Toggle active" must apply to all opened file tabs
+
 2019.04.17
 + add: command "Toggle active"
 

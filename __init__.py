@@ -45,15 +45,16 @@ class Command:
     def toggle(self):
 
         self.active = not self.active
-        if self.active:
-            if self.lexer_ok(ed):
-                self.work(ed)
-                msg_status('Colored Indent: on')
+        msg_status('Colored Indent: '+('on' if self.active else 'off'))
+
+        for h in ed_handles():
+            e = Editor(h)
+            if self.active:
+                if self.lexer_ok(e):
+                    self.work(e)
             else:
-                msg_status('Colored Indent: on (not for current file)')
-        else:
-            ed.attr(MARKERS_DELETE_BY_TAG, tag=MARKTAG)
-            msg_status('Colored Indent: off')
+                e.attr(MARKERS_DELETE_BY_TAG, tag=MARKTAG)
+
 
     def on_start(self, ed_self):
 
