@@ -4,6 +4,7 @@ desc=Colorizes spaces/tabs in indents
 type=cudatext-plugin
 subdir=cuda_colored_indent
 homepage=https://github.com/CudaText-addons/cuda_colored_indent
+api=1.0.302
 
 [item1]
 section=events
