@@ -8,13 +8,13 @@ MARKTAG = 103 #uniq value for all ed.attr() plugins
 def bool_to_str(v): return '1' if v else '0'
 def str_to_bool(s): return s=='1'
 
-_theme = app_proc(PROC_THEME_SYNTAX_DATA_GET, '')
+_theme = app_proc(PROC_THEME_SYNTAX_DICT_GET, '')
 
 def _theme_item(name):
-    for i in _theme:
-        if i['name']==name:
-            return i['color_back']
-    return 0x808080
+    if name not in _theme:
+        return 0x808080
+    else:
+        return _theme[name]['color_back']
 
 def get_indent(s):
     for i in range(len(s)):
