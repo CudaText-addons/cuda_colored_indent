@@ -11,10 +11,10 @@ def str_to_bool(s): return s=='1'
 _theme = app_proc(PROC_THEME_SYNTAX_DICT_GET, '')
 
 def _theme_item(name):
-    if name not in _theme:
-        return 0x808080
-    else:
+    if name in _theme:
         return _theme[name]['color_back']
+    else:
+        return 0x808080
 
 def get_indent(s):
     for i in range(len(s)):
@@ -28,17 +28,15 @@ class Command:
     def __init__(self):
 
         opt.color_error = ini_read(fn_config, 'op', 'color_error', opt.DEF_ERROR)
-        self.color_error = _theme_item(opt.color_error)
-
         opt.color_set = ini_read(fn_config, 'op', 'color_set', opt.DEF_SET)
-        self.color_set = [_theme_item(i) for i in opt.color_set.split(',')]
-
         opt.lexers = ini_read(fn_config, 'op', 'lexers', opt.DEF_LEXERS)
         opt.max_lines = int(ini_read(fn_config, 'op', 'max_lines', '2000'))
 
+        self.update_colors()
+
         app_proc(PROC_SET_EVENTS, ';'.join([
             'cuda_colored_indent',
-            'on_open,on_change_slow',
+            'on_open,on_change_slow,on_state',
             opt.lexers
             ]))
 
@@ -59,6 +57,15 @@ class Command:
     def on_start(self, ed_self):
 
         pass
+
+    def on_state(self, ed_self, state):
+
+        global _theme
+
+        if state==APPSTATE_THEME_SYNTAX:
+            _theme = app_proc(PROC_THEME_SYNTAX_DICT_GET, '')
+            self.update_colors()
+            self.work(ed_self)
 
     def get_color(self, n):
 
@@ -85,7 +92,13 @@ class Command:
         lex = ed.get_prop(PROP_LEXER_FILE)
         return lex and (','+lex+',' in ','+opt.lexers+',')
 
+    def update_colors(self):
+
+        self.color_error = _theme_item(opt.color_error)
+        self.color_set = [_theme_item(i) for i in opt.color_set.split(',')]
+
     def work(self, ed):
+
         if not self.active:
             return
 
