@@ -11,8 +11,12 @@ plugin has config file, to open it: "Options / Settings-plugins / Colored Indent
 - "color_set": ","-separated list of syntax-theme elements, from which background colors are taken.
 - "color_error": syntax-theme element, from which error color is taken.
 - "max_lines": maximal count of lines in document, when plugin is active.
+- "active": persists activation state of plugin to restore it in next session.
+
+plugin adds a menu entry to manually reload its config file: "Plugins / Colored Indent / Reload config".
 
 plugin works on events: after file opened; after text is changed and short pause is passed.
 
 author: Alexey Torgashin (CudaText)
+enhancements: Andreas Heim (dinkumoil)
 license: MIT
