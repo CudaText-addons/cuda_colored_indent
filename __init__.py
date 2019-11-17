@@ -23,15 +23,10 @@ def get_indent(s):
     return ''
 
 class Command:
-    active = True
 
     def __init__(self):
 
-        opt.color_error = ini_read(fn_config, 'op', 'color_error', opt.DEF_ERROR)
-        opt.color_set = ini_read(fn_config, 'op', 'color_set', opt.DEF_SET)
-        opt.lexers = ini_read(fn_config, 'op', 'lexers', opt.DEF_LEXERS)
-        opt.max_lines = int(ini_read(fn_config, 'op', 'max_lines', '2000'))
-
+        self.load_settings()
         self.update_colors()
 
         app_proc(PROC_SET_EVENTS, ';'.join([
@@ -40,26 +35,36 @@ class Command:
             opt.lexers
             ]))
 
+    def config(self):
+
+        self.save_settings()
+        file_open(fn_config)
+
     def toggle(self):
 
-        self.active = not self.active
-        msg_status('Colored Indent: '+('on' if self.active else 'off'))
+        opt.active = not opt.active
 
+        self.save_settings()
         self.apply_settings()
 
-    def apply_settings(self):
+        msg_status('Colored Indent: '+('on' if opt.active else 'off'))
 
-        for h in ed_handles():
-            e = Editor(h)
-            if self.active:
-                if self.lexer_ok(e):
-                    self.work(e)
-            else:
-                e.attr(MARKERS_DELETE_BY_TAG, tag=MARKTAG)
+    def reload_config(self):
+
+        self.load_settings()
+        self.apply_settings()
 
     def on_start(self, ed_self):
 
         pass
+
+    def on_open(self, ed_self):
+
+        self.work(ed_self)
+
+    def on_change_slow(self, ed_self):
+
+        self.work(ed_self)
 
     def on_state(self, ed_self, state):
 
@@ -70,30 +75,38 @@ class Command:
             self.update_colors()
             self.apply_settings()
 
-    def get_color(self, n):
+    def load_settings(self):
 
-        return self.color_set[n%len(self.color_set)]
+        opt.color_error = ini_read(fn_config, 'op', 'color_error', opt.DEF_ERROR)
+        opt.color_set = ini_read(fn_config, 'op', 'color_set', opt.DEF_SET)
+        opt.lexers = ini_read(fn_config, 'op', 'lexers', opt.DEF_LEXERS)
+        opt.max_lines = int(ini_read(fn_config, 'op', 'max_lines', '2000'))
+        opt.active = str_to_bool(ini_read(fn_config, 'op', 'active', opt.DEF_ACTIVE))
 
-    def config(self):
-
+    def save_settings(self):
         ini_write(fn_config, 'op', 'lexers', opt.lexers)
         ini_write(fn_config, 'op', 'color_error', opt.color_error)
         ini_write(fn_config, 'op', 'color_set', opt.color_set)
         ini_write(fn_config, 'op', 'max_lines', str(opt.max_lines))
-        file_open(fn_config)
+        ini_write(fn_config, 'op', 'active', bool_to_str(opt.active))
 
-    def on_change_slow(self, ed_self):
-
-        self.work(ed_self)
-
-    def on_open(self, ed_self):
-
-        self.work(ed_self)
+    def apply_settings(self):
+        for h in ed_handles():
+            e = Editor(h)
+            if opt.active:
+                if self.lexer_ok(e):
+                    self.work(e)
+            else:
+                e.attr(MARKERS_DELETE_BY_TAG, tag=MARKTAG)
 
     def lexer_ok(self, ed):
 
         lex = ed.get_prop(PROP_LEXER_FILE)
         return lex and (','+lex+',' in ','+opt.lexers+',')
+
+    def get_color(self, n):
+
+        return self.color_set[n%len(self.color_set)]
 
     def update_colors(self):
 
@@ -102,7 +115,7 @@ class Command:
 
     def work(self, ed):
 
-        if not self.active:
+        if not opt.active:
             return
 
         if ed.get_line_count()>opt.max_lines:
