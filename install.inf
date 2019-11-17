@@ -15,6 +15,11 @@ section=commands
 caption=Colored Indent\Toggle active
 method=toggle
 
+[item3]
+section=commands
+caption=Colored Indent\Reload config
+method=reload_config
+
 [item10]
 section=commands
 caption=Colored Indent\Config
