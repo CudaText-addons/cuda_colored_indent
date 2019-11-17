@@ -45,6 +45,10 @@ class Command:
         self.active = not self.active
         msg_status('Colored Indent: '+('on' if self.active else 'off'))
 
+        self.apply_settings()
+
+    def apply_settings(self):
+
         for h in ed_handles():
             e = Editor(h)
             if self.active:
@@ -52,7 +56,6 @@ class Command:
                     self.work(e)
             else:
                 e.attr(MARKERS_DELETE_BY_TAG, tag=MARKTAG)
-
 
     def on_start(self, ed_self):
 
@@ -65,7 +68,7 @@ class Command:
         if state==APPSTATE_THEME_SYNTAX:
             _theme = app_proc(PROC_THEME_SYNTAX_DICT_GET, '')
             self.update_colors()
-            self.work(ed_self)
+            self.apply_settings()
 
     def get_color(self, n):
 
