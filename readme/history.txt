@@ -1,6 +1,12 @@
 
+2019.11.17
+- fix: when colors of theme syntax items are changed, only indent colors of document in currently active tab get updated.
+- add: save active state of plugin in plugin settings file and restore it at next run of CudaText.
+- add: add menu entry "Reload config" to plugin's submenu in "Plugins" menu.
+
 2019.11.14
 - fix: avoid deleted CudaText API
+- add: handle theme change
 
 2019.04.25
 + add: command "Toggle active" must apply to all opened file tabs
