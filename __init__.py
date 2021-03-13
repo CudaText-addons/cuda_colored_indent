@@ -3,7 +3,7 @@ from cudatext import *
 from . import opt
 
 fn_config = os.path.join(app_path(APP_DIR_SETTINGS), 'cuda_colored_indent.ini')
-MARKTAG = 103 #uniq value for all ed.attr() plugins
+MARKTAG = app_proc(PROC_GET_UNIQUE_TAG, '')
 
 def bool_to_str(v): return '1' if v else '0'
 def str_to_bool(s): return s=='1'

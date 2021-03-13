@@ -1,4 +1,7 @@
 
+2021.03.13
++ add: use new API
+
 2019.11.17
 - fix: when colors of theme syntax items are changed, only indent colors of document in currently active tab get updated.
 - add: save active state of plugin in plugin settings file and restore it at next run of CudaText.
