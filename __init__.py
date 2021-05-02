@@ -2,8 +2,6 @@ import os
 from cudatext import *
 from . import opt
 
-from time import time as t
-
 fn_config = os.path.join(app_path(APP_DIR_SETTINGS), 'cuda_colored_indent.ini')
 MARKTAG = app_proc(PROC_GET_UNIQUE_TAG, '')
 
@@ -63,7 +61,7 @@ class Command:
     def on_open(self, ed_self):
 
         callback = lambda *args,**vargs: self.work(ed_self)
-        timer_proc(TIMER_START_ONE, callback, 1000)
+        timer_proc(TIMER_START_ONE, callback, 250)
         #self.work(ed_self)
 
     def on_change_slow(self, ed_self):
