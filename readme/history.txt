@@ -1,3 +1,5 @@
+2021.05.02
+* change: optimization for faster start (@halfbrained)
 
 2021.03.13
 + add: use new API
