@@ -60,7 +60,9 @@ class Command:
 
     def on_open(self, ed_self):
 
-        self.work(ed_self)
+        callback = lambda *args,**vargs: self.work(ed_self)
+        timer_proc(TIMER_START_ONE, callback, 250)
+        #self.work(ed_self)
 
     def on_change_slow(self, ed_self):
 
@@ -127,6 +129,9 @@ class Command:
         ed.attr(MARKERS_DELETE_BY_TAG, tag=MARKTAG)
 
         lines = ed.get_text_all().splitlines()
+
+        atrs = [] # (x,y,len, bg)
+
         for (index, s) in enumerate(lines):
             indent = get_indent(s)
             if not indent:
@@ -138,34 +143,31 @@ class Command:
             while indent:
                 level += 1
                 if indent[0]=='\t':
-                    ed.attr(MARKERS_ADD,
-                        x=x,
-                        y=index,
-                        len=1,
-                        tag=MARKTAG,
-                        color_font=0,
-                        color_bg=self.get_color(level),
-                        )
+                    atrs.append((x, index, 1, self.get_color(level)))
                     indent = indent[1:]
                     x += 1
                 elif indent[:tab_size]==' '*tab_size:
-                    ed.attr(MARKERS_ADD,
-                        x=x,
-                        y=index,
-                        len=tab_size,
-                        tag=MARKTAG,
-                        color_font=0,
-                        color_bg=self.get_color(level),
-                        )
+                    atrs.append((x, index, tab_size, self.get_color(level)))
                     indent = indent[tab_size:]
                     x += tab_size
                 else:
-                    ed.attr(MARKERS_ADD,
-                        x=x,
-                        y=index,
-                        len=len(indent),
-                        tag=MARKTAG,
-                        color_font=0,
-                        color_bg=self.color_error,
-                        )
+                    atrs.append((x, index, len(indent), self.color_error))
                     break
+        #end for
+
+        colors = {item[3] for item in atrs}
+
+        for bg in colors:
+            col_items = (item for item in atrs  if item[3] == bg)
+            xs,ys,lens,_cols = zip(*col_items)
+
+            ed.attr(MARKERS_ADD_MANY,
+                x=xs,
+                y=ys,
+                len=lens,
+                tag=MARKTAG,
+                color_font=0,
+
+                color_bg=bg,
+                )
+
