@@ -20,7 +20,10 @@ def get_indent(s):
     for i in range(len(s)):
         if s[i] not in (' ', '\t'):
             return s[:i]
-    return ''
+    if opt.only_space:
+        return s
+    else:
+        return ''
 
 class Command:
 
@@ -84,6 +87,7 @@ class Command:
         opt.lexers = ini_read(fn_config, 'op', 'lexers', opt.DEF_LEXERS)
         opt.max_lines = int(ini_read(fn_config, 'op', 'max_lines', '2000'))
         opt.active = str_to_bool(ini_read(fn_config, 'op', 'active', opt.DEF_ACTIVE))
+        opt.only_space = str_to_bool(ini_read(fn_config, 'op', 'only_space', '0'))
 
     def save_settings(self):
         ini_write(fn_config, 'op', 'lexers', opt.lexers)
@@ -91,6 +95,7 @@ class Command:
         ini_write(fn_config, 'op', 'color_set', opt.color_set)
         ini_write(fn_config, 'op', 'max_lines', str(opt.max_lines))
         ini_write(fn_config, 'op', 'active', bool_to_str(opt.active))
+        ini_write(fn_config, 'op', 'only_space', bool_to_str(opt.only_space))
 
     def apply_settings(self):
         for h in ed_handles():

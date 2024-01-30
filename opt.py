@@ -8,3 +8,4 @@ color_set = (0xff00, 0xffff)
 lexers = ''
 max_lines = 2000
 active = True
+only_space = False
