@@ -63,9 +63,10 @@ class Command:
 
     def on_open(self, ed_self):
 
-        callback = lambda *args,**vargs: self.work(ed_self)
-        timer_proc(TIMER_START_ONE, callback, 250)
-        #self.work(ed_self)
+        # callback = lambda *args,**vargs: self.work(ed_self)
+        # timer_proc(TIMER_START_ONE, callback, 250)
+        ### work via timer gives CudaText crash sometimes: CudaText issue #5889
+        self.work(ed_self)
 
     def on_change_slow(self, ed_self):
 
