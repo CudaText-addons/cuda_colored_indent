@@ -32,11 +32,7 @@ class Command:
         self.load_settings()
         self.update_colors()
 
-        app_proc(PROC_SET_EVENTS, ';'.join([
-            'cuda_colored_indent',
-            'on_open,on_change_slow,on_state',
-            opt.lexers
-            ]))
+        app_proc(PROC_EVENTS_SUB, 'cuda_colored_indent;on_open,on_change_slow,on_state;' + opt.lexers)
 
     def config(self):
 
